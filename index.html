@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMuslim - Portal Edukasi Islam & Sunnah</title>
+    <style>
+        /* ==================== RESET & GENERAL STYLES ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        :root {
+            --primary-color: #0f5132;
+            --secondary-color: #198754;
+            --accent-color: #d4af37;
+            --bg-light: #f8f9fa;
+            --text-dark: #212529;
+            --text-light: #6c757d;
+        }
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* ==================== HEADER & NAVBAR ==================== */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        nav a:hover, nav a.active {
+            background-color: var(--secondary-color);
+            color: var(--accent-color);
+        }
+
+        /* Dropdown Style */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-radius: 5px;
+            overflow: hidden;
+            flex-direction: column;
+            gap: 0;
+        }
+        .dropdown-menu a {
+            color: var(--text-dark);
+            padding: 0.8rem 1rem;
+            display: block;
+            border-bottom: 1px solid #eee;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+            color: var(--primary-color);
+        }
+        .dropdown:hover .dropdown-menu {
+            display: flex;
+        }
+
+        /* ==================== MAIN CONTENT & LAYOUT ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            min-height: 70vh;
+        }
+        .section-page {
+            display: none; /* Disembunyikan secara default, diatur via JS */
+        }
+        .section-page.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sidebar & Sub-navigation */
+        .layout-with-sidebar {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+        .sub-nav {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+        .sub-nav h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+        .sub-nav ul {
+            list-style: none;
+        }
+        .sub-nav li a {
+            display: block;
+            padding: 0.7rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 0.3rem;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .sub-nav li a:hover, .sub-nav li a.active-sub {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .content-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .content-box h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Card List untuk Artikel */
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Style Teks Arab */
+        .arabic {
+            font-size: 1.5rem;
+            font-family: 'Traditional Arabic', 'Amiri', serif;
+            text-align: right;
+            direction: rtl;
+            margin: 1rem 0;
+            color: #000;
+            line-height: 2.2rem;
+        }
+        .latin {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .layout-with-sidebar {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR HEADER -->
+    <header>
+        <a href="#" class="logo" onclick="showPage('beranda')">🕌 iMuslim</a>
+        <nav>
+            <ul>
+                <li><a id="nav-beranda" class="active" onclick="showPage('beranda')">Beranda</a></li>
+                <li class="dropdown">
+                    <a id="nav-artikel" onclick="showPage('artikel')">Artikel Muslim ▾</a>
+                    <div class="dropdown-menu">
+                        <a onclick="showSubContent('artikel', 'art-aqidah')">Aqidah & Tauhid</a>
+                        <a onclick="showSubContent('artikel', 'art-akhlak')">Akhlak Mulia</a>
+                        <a onclick="showSubContent('artikel', 'art-sejarah')">Sejarah Islam</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a id="nav-sholat" onclick="showPage('sifat-sholat')">Sifat Shalat Nabi ▾</a>
+                    <div class="dropdown-menu">
+                        <a onclick="showSubContent('sifat-sholat', 'cara-shalat')">Cara Shalat Nabi</a>
+                        <a onclick="showSubContent('sifat-sholat', 'bacaan-shalat')">Bacaan Shalat Sunnah</a>
+                        <a onclick="showSubContent('sifat-sholat', 'doa-iftitah')">12 Doa Iftitah</a>
+                        <a onclick="showSubContent('sifat-sholat', 'dzikir-setelah-shalat')">Dzikir Setelah Shalat</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <div class="container">
+
+        <!-- 1. HALAMAN BERANDA -->
+        <section id="page-beranda" class="section-page active">
+            <div class="content-box" style="text-align: center; padding: 3rem 1rem;">
+                <h1 style="color: var(--primary-color); font-size: 2.5rem;">Selamat Datang di iMuslim</h1>
+                <p style="margin: 1rem 0; color: var(--text-light);">Media Pembelajaran & Edukasi Islam Sesuai Al-Qur'an dan As-Sunnah</p>
+                <button onclick="showPage('sifat-sholat')" style="background: var(--accent-color); color: var(--primary-color); border: none; padding: 0.8rem 1.5rem; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 1rem;">
+                    Pelajari Sifat Shalat Nabi
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. HALAMAN ARTIKEL MUSLIM -->
+        <section id="page-artikel" class="section-page">
+            <div class="layout-with-sidebar">
+                <!-- Sidebar Navigasi Artikel -->
+                <aside class="sub-nav">
+                    <h3>Navigasi Artikel</h3>
+                    <ul>
+                        <li><a id="btn-art-aqidah" class="active-sub" onclick="showSubContent('artikel', 'art-aqidah')">Aqidah & Tauhid</a></li>
+                        <li><a id="btn-art-akhlak" onclick="showSubContent('artikel', 'art-akhlak')">Akhlak Mulia</a></li>
+                        <li><a id="btn-art-sejarah" onclick="showSubContent('artikel', 'art-sejarah')">Sejarah Islam</a></li>
+                    </ul>
+                </aside>
+                
+                <!-- Konten Artikel -->
+                <main class="content-box">
+                    <div id="art-aqidah" class="sub-content">
+                        <h2>Pentingnya Mempelajari Tauhid</h2>
+                        <p>Tauhid adalah fondasi utama dalam agama Islam. Setiap amalan tidak akan diterima jika tidak dilandasi oleh tauhid yang lurus dan terbebas dari syirik...</p>
+                    </div>
+                    <div id="art-akhlak" class="sub-content" style="display: none;">
+                        <h2>Menjaga Akhlak Kepada Orang Tua</h2>
+                        <p>Berbakti kepada kedua orang tua (Birrul Walidain) adalah salah satu amalan paling dicintai oleh Allah SWT setelah shalat tepat pada waktunya...</p>
+                    </div>
+                    <div id="art-sejarah" class="sub-content" style="display: none;">
+                        <h2>Kisah Hijrah Rasulullah SAW</h2>
+                        <p>Peristiwa hijrah Nabi Muhammad SAW dari Mekkah ke Madinah menjadi titik balik besar dalam sejarah peradaban Islam dan dimulainya kalender Hijriyah...</p>
+                    </div>
+                </main>
+            </div>
+        </section>
+
+        <!-- 3. HALAMAN SIFAT SHALAT NABI -->
+        <section id="page-sifat-sholat" class="section-page">
+            <div class="layout-with-sidebar">
+                <!-- Sidebar Navigasi Sifat Shalat -->
+                <aside class="sub-nav">
+                    <h3>Panduan Shalat</h3>
+                    <ul>
+                        <li><a id="btn-cara-shalat" class="active-sub" onclick="showSubContent('sifat-sholat', 'cara-shalat')">Cara Shalat Nabi</a></li>
+                        <li><a id="btn-bacaan-shalat" onclick="showSubContent('sifat-sholat', 'bacaan-shalat')">Bacaan Shalat Sunah</a></li>
+                        <li><a id="btn-doa-iftitah" onclick="showSubContent('sifat-sholat', 'doa-iftitah')">12 Doa Iftitah</a></li>
+                        <li><a id="btn-dzikir-setelah-shalat" onclick="showSubContent('sifat-sholat', 'dzikir-setelah-shalat')">Dzikir Setelah Shalat</a></li>
+                    </ul>
+                </aside>
+
+                <!-- Detail Konten Sifat Shalat -->
+                <main class="content-box">
+                    <!-- Cara Shalat -->
+                    <div id="cara-shalat" class="sub-content">
+                        <h2>Cara Shalat Sesuai Petunjuk Nabi</h2>
+                        <p>Rasulullah SAW bersabda: <em>"Shalatlah kalian sebagaimana kalian melihat aku shalat."</em> (HR. Bukhari).</p>
+                        <br>
+                        <ol style="margin-left: 1.5rem;">
+                            <li><strong>Niat:</strong> Berniat di dalam hati untuk menunaikan shalat karena Allah.</li>
+                            <li><strong>Takbiratul Ihram:</strong> Berdiri tegak, menghadap kiblat, dan mengucap "Allahu Akbar".</li>
+                            <li><strong>Bersedekap:</strong> Meletakkan tangan kanan di atas tangan kiri di atas dada.</li>
+                            <li><strong>Rukuk & Sujud:</strong> Lakukan dengan thuma'ninah (tenang).</li>
+                        </ol>
+                    </div>
+
+                    <!-- Bacaan Shalat -->
+                    <div id="bacaan-shalat" class="sub-content" style="display: none;">
+                        <h2>Bacaan Shalat Sesuai Sunnah</h2>
+                        <h3>Bacaan Ruku'</h3>
+                        <div class="arabic">سُبْحَانَ رَبِّيَ الْعَظِيْمِ وَبِحَمْدِهِ</div>
+                        <div class="latin">Subhaana rabbiyal 'azhiimi wa bihamdihi</div>
+                        <p>Maha Suci Rabbku Yang Maha Agung dan dengan memuji-Nya.</p>
+                    </div>
+
+                    <!-- 12 Doa Iftitah -->
+                    <div id="doa-iftitah" class="sub-content" style="display: none;">
+                        <h2>12 Macam-Macam Doa Iftitah</h2>
+                        <p>Terdapat beberapa variasi bacaan doa Iftitah yang bersumber dari hadits-hadits shahih:</p>
+                        <br>
+                        
+                        <h4>Doa Iftitah 1 (Paling Populer & Shahih)</h4>
+                        <div class="arabic">اللَّهُمَّ بَاعِدْ بَيْنِي وَبَيْنَ خَطَايَايَ كَمَا بَاعَدْتَ بَيْنَ الْمَشْرِقِ وَالْمَغْرِبِ...</div>
+                        <div class="latin">Allahumma baa'id bainii wa baina khathaayaaya kamaa baa'adta bainal masyriqi wal maghrib...</div>
+                        <hr style="margin: 1.5rem 0;">
+
+                        <h4>Doa Iftitah 2 (Versi Pendek)</h4>
+                        <div class="arabic">سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلاَ إِلَهَ غَيْرُكَ</div>
+                        <div class="latin">Subhaanakallahumma wa bihamdika wa tabaarakasmuka wa ta'aala jadduka wa laa ilaaha ghairuk.</div>
+                        <hr style="margin: 1.5rem 0;">
